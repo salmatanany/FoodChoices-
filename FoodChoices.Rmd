@@ -1,0 +1,801 @@
+---
+Title: "Food Choices and preferences of college students"
+Author: "Salma Tarek 184847/ Mohaned 155259"
+
+
+---
+#  **$\color{#9ACD32}{\text{Introduction}}$ **  
+Mercyhurst University is a 4 years, Catholic institution founded in 1926 by the sisters of Mercy. It’s a liberal arts college in Erie, Pennsylvania. About 126 students from it responded on a survey about their food choices and preferences. Forming the dataset which is about the data taken from male and female students who answered several questions regarding their GPA, comfort food and the reason behind it. Their favorite food and their diet habit, the number of exercises they do per day, and how do their eating change along with their years in college from being freshman up till being seniors. Also the number of their meals intake are counted which is split into turkey, chicken, waffle, tortilla and scone. Their coffee and alcoholic intake are counted etc. and asking them about their family member’s education, profession and fav cuisine too.In addition to the students' awareness of saving the environment through testing their understandings about carbon footprint.Carbon footprint is the greenhouse gas emissions produced by growing, rearing, farming, processing, transporting, storing, cooking and disposing of the food you eat.The main concern is to inform students that changing the foods that they eat can have a big impact on their carbon footprint, and reduce pollution, preserve the environment and slow global warming. 
+
+```
+
+```
+
+```{r}
+
+```
+**The dataset will help in identifying the following:** 
+
+1.	What's the majority gender that has higher GPA ?
+2.	Does drinking coffee increase students' studying hours ?
+3.	Does vitamins have a role in students' exercises ?
+4.	Does junk food affect students' income ?
+5.	Does being busy distract you from eating junk food?
+6.	Does drinking coffee boost students' energy ?
+7.  Do vitamins intake affects student's academic performance ?
+8.	Do students eat out while studying ?
+9.	Does students caloric intake affect their weight ? 
+10. Do Vegan students' brain cells are more actively functioned ?
+11. Does the student's food choice pollute the environment?
+
+```{r}
+
+```
+**The dataset attributes that will be used are** 
+
+**GPA** of each student in the college.
+**Gender**  of each student.
+**calories_chicken** is the calories of the chicken the students eat per day.
+**calories_scone** is the calories of the scone the students eat per day.
+**Coffee** states whether the students drink coffee or not.
+**drink** states Whether the students drink alcohol or not.
+**eating_changes** describes how the eating habits got changed for the students. 
+**employment** describes the number of employed students while studying in college.
+**Income** describes the status of the students' social standards .
+**Fav_Food** describes each student favorite food.
+**Pay_meal_out** is the frequency in which students pay for meal out.
+**tortilla_calories** is the calories of tortilla that the students eat per day.
+**waffle_calories** is the calories of waffles that the students eat per day.
+**weight** of each student in lbs.
+**weightIKG** of each student after it got converted into kilograms.
+**HEIGHT** of each student in cm..
+**eating_Out** The average of days for students eating out per week.
+**Studying_hrs**is students studying hours daily.
+**Exercise** is the number of exercises that the each student do per week.
+**Vegan** is the percentage of students willing for following vegan diet.
+**CoffeAddict** is the percentage of coffee addiction that each student has.
+**caloriesSum** is the sum of calories that each student eat per day.
+**CaloriesReduction** is the amount of calories remained for students after eating and doing exercises.
+**CO2Kilos** is the amount of carbon dioxide emitted in the environment. 
+**CarMiles** are the kilometers that the car has been driven to reach a certain place.
+**CarRemoval** is the amount of cars that will be remove from the street
+**Meditertanean_diet** is the percentage of the students who are likely wanting to follow Meditertanean_diet
+```{r}
+#Read Datasets
+dataset <- read.csv("C:\\users\\pc\\Documents\\food_coded.csv", sep=",", header=TRUE)
+dim(dataset)
+dataset2<-read.csv("C:\\users\\pc\\Documents\\StudyingDataset.csv", sep=",", header=TRUE)
+dim(dataset2)
+dataset3<-read.csv("C:\\users\\pc\\Documents\\carbonFootprint.csv", sep=",", header=TRUE)
+dim(dataset3)
+
+```
+
+```{r}
+## the required packages to run the project
+#install.packages("assertive")
+#install.packages("ggpubr")
+#install.packages(""plotly")
+#install.packages("ggplot2")
+#install.packages("ggcorrplot")
+#intsall.packages("ggplotly")
+#install.packages("dplyr")
+#install.packages("ggpubr")
+
+```
+## Loading libraries:
+the code for loading the library
+
+```{r}
+
+library(assertive)
+library("ggpubr")
+library("plotly")
+library(ggplot2) 
+library("ggcorrplot")
+
+
+```
+The following  shows the greenhouse gas emissions produced by one kilo of each food. It includes all the emissions produced on the farm, in the factory, on the road, in the shop and in your home. It also shows how many miles the students need to drive to produce that many greenhouse gases
+```{r}
+# Inserting certain numbers according to the carbon footprint table 
+dataset$fav_food[3]<-2
+dataset$fav_food[4]<-5
+dataset$fav_food[5]<-6
+dataset$fav_food[10]<-7
+dataset$fav_food[14]<-8
+dataset$fav_food[20]<-9
+dataset$fav_food[25]<-4
+dataset$fav_food[30]<-10
+dataset$fav_food[31]<-10
+dataset$fav_food[50]<-11
+dataset$fav_food[51]<-11
+dataset$fav_food[52]<-12
+dataset$fav_food[70]<-13
+dataset$fav_food[73]<-14
+dataset$fav_food[79]<-15
+dataset$fav_food[80]<-16
+dataset$fav_food<-as.integer(dataset$fav_food)
+fav_food<-dataset$fav_food
+fav_food
+```
+
+
+```{r message=FALSE, warning=FALSE}
+```
+
+
+```{r message=FALSE, warning=FALSE}
+dataset$CO2kilos<-c(0:497)
+dataset$Co2Kilos
+
+for(i in 1:496){
+  
+   if (is.na(dataset$fav_food[i])) {
+    print('Missing')
+  }
+  else if (dataset$fav_food[i]==1){
+    dataset$Co2Kilos[i]<-"39.2"
+  print(as.double(dataset$Co2Kilos[i]))
+  i<-+1
+  }
+  else if (dataset$fav_food[i]==2){
+    dataset$Co2Kilos[i]<-"27.0"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==3){
+    dataset$Co2Kilos[i]<-"13.5"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==4){
+    dataset$Co2Kilos[i]<-"12.1"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==5){
+    dataset$Co2Kilos[i]<-"10.9"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==6){
+    dataset$Co2Kilos[i]<-"6.9"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==7){
+    dataset$Co2Kilos[i]<-"6.1"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==8){
+    dataset$Co2Kilos[i]<-"4.8"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==9){
+    dataset$Co2Kilos[i]<-"2.9"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==10){
+    dataset$Co2Kilos[i]<-"2.7"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==11){
+    dataset$Co2Kilos[i]<-"2.3"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==12){
+    dataset$Co2Kilos[i]<-"2.0"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==13){
+    dataset$Co2Kilos[i]<-"2.0"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  
+  else if (dataset$fav_food[i]==14){
+    dataset$Co2Kilos[i]<-"1.9"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==15){
+    dataset$Co2Kilos[i]<-"1.1"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else if (dataset$fav_food[i]==16){
+    dataset$Co2Kilos[i]<-"0.9"
+    print(as.double(dataset$Co2Kilos[i]))
+    i<-+1
+  }
+  else 
+    print('NA')
+}
+
+
+```
+
+
+```{r}
+CarMiles<-c(2:499)
+dataset$CarMiles<-CarMiles
+
+j<-1
+for(j in j:497){
+  
+  if (is.na(dataset$fav_food[i])&& is.na(dataset$Co2Kilos[j]) ) {
+    print('Missing')
+  }
+  
+  else if ((dataset$fav_food[j]==1) && (dataset$Co2Kilos[j]==39.2)){
+    dataset$CarMiles<-"91"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+    
+  }
+  else if ((dataset$fav_food[j]==2) && (dataset$Co2Kilos[j]==27.0) ){
+    dataset$CarMiles<-"63"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==3 ) && (dataset$Co2Kilos[j]==13.5)){
+    dataset$CarMiles<-"31"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==4)  && (dataset$Co2Kilos[j]==12.1)){
+    dataset$CarMiles<-"28"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==5) && (dataset$Co2Kilos[j]==10.9)){
+    dataset$CarMiles<-"25"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==6)  && (dataset$Co2Kilos[j]==6.9) ){
+    dataset$CarMiles<-"16"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==7) && (dataset$Co2Kilos[j]==6.1)){
+    dataset$CarMiles<-"14"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==8)  && (dataset$Co2Kilos[j]==4.8)){
+    dataset$CarMiles<-"11"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==9)  && (dataset$Co2Kilos[j]==2.9)){
+    dataset$CarMiles<-"7"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==10)  && (dataset$Co2Kilos[j]==2.7)){
+    dataset$CarMiles<-"6"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==11)  && (dataset$Co2Kilos[j]==2.3)){
+    dataset$CarMiles<-"5"
+    print(as.double(dataset$CarMiles[j]))
+    j<j-+1
+  }
+  else if ((dataset$fav_food[j]==12)  && (dataset$Co2Kilos[j]==2.0)){
+    dataset$CarMiles<-"4.5"
+    print(as.double(dataset$CarMiles[j]))
+    j<j-+1
+  }
+  else if ((dataset$fav_food[j]==13)  && (dataset$Co2Kilos[j]==2.0)){
+    dataset$CarMiles<-"4.5"
+    print(as.double(dataset$CarMiles[j]))
+    j<j-+1
+  }
+  
+  else if ((dataset$fav_food[j]==14)  && (dataset$Co2Kilos[j]==1.9)){
+    dataset$CarMiles<-"4"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  else if ((dataset$fav_food[j]==15)  && (dataset$Co2Kilos[j]==1.1) ){
+    dataset$CarMiles<-"2.5"
+    print(as.double(dataset$CarMiles[i]))
+    j<-j+1
+  }
+  
+  else if ((dataset$fav_food[j]==16)  && (dataset$Co2Kilos[j]==0.9)){
+    dataset$CarMiles<-"2"
+    print(as.double(dataset$CarMiles[j]))
+    j<-j+1
+  }
+  
+  else 
+    print('NA')
+}
+j<-1
+```
+
+
+
+```{r}
+#Assigning values for the students' height 
+H<-c(120:617)
+H
+dataset$height<-as.integer(H) #Cast type height from string into integer
+dataset$height
+#Function ConvertToKG that converts the weight unit from lbs to KG 
+
+covertToKG <- function(x) {
+  result<-x/2.2
+  result<-as.numeric(result)
+  resultKG<-as.numeric(result)
+  return (resultKG)
+}
+
+w<-dataset$weight
+##Convert the weight into KG and double
+dataset$weightINKG<-as.numeric(w)
+dataset$weightINKG<-covertToKG(dataset$weightINKG)
+dataset$weightINKG
+```
+```{r}
+#data pre-processing
+
+#Students height that is higher than 189 is replaced by 0, as there won't be a college student higher than that
+dataset$HEIGHT<-replace( dataset$height,dataset$height>189 ,0)
+dataset$HEIGHT
+h<-dataset$HEIGHT
+h<-as.integer(h)
+h
+#Replace all the values of CO2kilos that are greater than 39.2 with NA
+dataset$Co2KilosS<-as.double(dataset$Co2Kilos)
+dataset$Co2Kilos<-replace(dataset$Co2KilosS, dataset$Co2KilosS > 39.2, NA) 
+#Remove NA from CO2Kilos
+K=na.omit(dataset$Co2Kilos)
+K
+
+#Remove NA values from co2Kilos
+dataset$Co2KilosS <-replace(dataset$Co2KilosS,is.na(dataset$Co2KilosS),na.omit(dataset$Co2Kilos))
+dataset$Co2KilosS 
+
+#Remove NA values from CarMiles
+for(i in 1:length(dataset$CarMiles[i])){
+dataset$CarMiles <-replace(dataset$CarMiles ,is.na(dataset$CarMiles), na.omit(dataset$CarMiles))
+dataset$CarMiles  
+}
+dataset$CarMiles  
+
+
+#Remove any NA data from fav food to get better results of the carbon footprint ranking
+
+for ( i in 1:length(dataset$fav_food[i])){
+dataset$fav_food<-replace( dataset$fav_food, is.na(dataset$fav_food),na.omit(dataset$fav_food)) 
+dataset$fav_food
+i<-+1
+}
+dataset$fav_food
+#Replace any unemployed student with 0 instead of NO DATA for better visualization
+
+dataset$employment<-replace(dataset$employment, is.na(dataset$employment),0)
+dataset$employment
+
+
+
+#Remove NA values from employment
+dataset$employment2<-replace(dataset$employment, is.na(dataset$employment) ,na.omit(dataset$employment))
+dataset$employment2<-as.numeric(dataset$employment2)
+dataset$employment2
+
+
+
+#Replace any student with NO DATA about drinking alcohol or not with 0 for better visualization
+dataset$drink<-replace(dataset$drink, is.na(dataset$drink),0)
+dataset$drink
+
+#Categorizing the students' favorite food according to the carbon footprint table 
+dataset$fav_food=factor(dataset$fav_food,levels =c( "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"),
+                        labels=c("Lamb","Beef","Cheese","Pork","Turkey","Chicken","Tuna","Eggs","Potatoes","Rice","Nuts","Beans/tofu","Vegetables","Milk","Fruit","Lentil"))
+dataset$fav_food
+
+
+#Categorize students who take vitamins or not with yes or no
+dataset$vitamins=factor(dataset$vitamins, levels = c( "1","2"), labels=c("Yes","NO"))
+dataset$vitamins
+
+#Filtering any NA value from students' GPA
+i<-1
+for(i in i:length(dataset$Gender)){
+dataset$Gender<-replace( dataset$Gender,is.na(dataset$Gender),na.omit(dataset$Gender))
+dataset$Gender
+i<-i+1
+}
+dataset$GPAA
+
+
+#Categorize students' gender with Male and Female 
+dataset$Gender=factor(dataset$Gender, levels = c( "1","2"), labels=c("F","M"))
+dataset$Gender
+
+#Categorize students who drink alcohol or not with yes or no
+dataset$drink=factor(dataset$drink, levels = c( "0","1","2"), labels=c("Undeclared","Yes","NO"))
+dataset$drink
+
+#Convert the string data into double for the GPA calculations
+dataset$GPAA<-as.double(dataset$GPA) 
+dataset$GPAA
+#Filtering any NA value from students' GPA
+for(i in i:length(dataset$GPAA[i])){
+dataset$GPAA<-replace( dataset$GPAA,is.na(dataset$GPAA),na.omit(dataset$GPAA))
+dataset$GPAA
+i<-i+1
+}
+dataset$GPAA
+
+
+#Assume that students who did not answer on diet changes that they did not change their diet
+#replace any NA with 4 that has the no changes category
+dataset$eating_changes
+dataset$eating_changes<-replace( dataset$eating_changes, is.na(dataset$eating_changes),"no changes") 
+dataset$eating_changes
+
+#Replace any student mentioning his status income with  1 which is very poor and he/she may got embarrassed to answer
+dataset$income<-replace( dataset$income, is.na(dataset$income),1) 
+dataset$eating_changes
+
+#Categorize the student status of income 
+dataset$income=factor(dataset$income, levels = c( "1","2","3","4","5","6"), labels=c("very poor","poor", "average","good","high","very high"))
+dataset$income
+
+#Replace any weight in 0 KG with NA to overcome errors in the calculations
+dataset$weightINKG<-replace( dataset$weightINKG, dataset$weightINKG==0,NA) 
+dataset$weightINKG 
+
+
+```
+```{r}
+
+```
+The main concern for calories reduction is to analyze the amount of calories that each student lose when he/she do exercise from the total calories that enter his/her body daily.
+
+
+```{r}
+CaloriesReduction<- function(x,y) {
+  
+Excercise<-dataset$exercise
+y<-Excercise*500
+x<-dataset$IntcaloriesSum
+TotalCalories<- x-y
+  return (TotalCalories)
+}
+```
+While exploring data we recognized several things about the students food choices. 
+
+First of all we conducted that the majority students who do 1 exercise per week takes vitamins by 51%, while the students who do not take vitamins are 49% percent. But the majority students who do 2 exercises per week do not take vitamins by 57%, and the students who take vitamins are only 43%. The majority of students who do 3 exercises per week takes vitamins by 55% which is the highest among all other exercises percentages, and the students who do not take vitamins are 45%. This means that vitamins has a role for students who do exercises. In a matter of fact the beginners are most probably needing energy to exercise, so they take vitamins and the experts who do 3 exercises per week needs more energy while exercising.
+
+
+Students studying hours also is affected by whether they drink coffee or not. Majority of students with studying hours less than 60 minutes, between 60 minutes and 180 minutes do not drink coffee a lot. While the majority of students with 240 minutes of studying likes drinking coffee;however, students who exceeds 300 minutes of studying do not prefer drinking coffee and the last which were students who study for 360 minutes were in a tie which no one prefers neither hate drinking coffee. This indicates that students who study between 4-5 hours are coffee lovers.
+
+Students who play 2 sports have less GPA than the students who play 1 sports.Showing that academic performance may get affected by playing more than 1 sport
+
+
+```{r}
+#Data exploration
+
+#the probability of num of exercises for students who take or not take vitamins
+table1<-table(dataset$exercise,dataset$vitamins)
+round(prop.table(table1,1),2)
+
+#the probability of students' studying hrs who prefer drinking coffee
+table2<-table(dataset$Studying_hrs,dataset$coffee)
+round(prop.table(table2,1),2)
+
+
+#the probability of the students GPA along with number of sports that they play
+table4<-table(dataset$GPAA, dataset$sports)
+round(prop.table(table4,1),2)
+
+```
+```{r}
+H<-as.numeric(H)
+H
+w<-as.numeric(w)
+BMI<- H/covertToKG(w)^2*703
+dataset$BMI<-as.integer(BMI)
+dataset$BMI
+
+z<-1
+for (z in 1:488){
+  if (isTRUE(dataset$BMI[z]<18.5)){
+   print( BMI[z]<-"underweight")
+  
+}
+ else if (isTRUE(dataset$BMI[z]<25)){
+  print( BMI[z]<-"NOrmal")
+ }
+  else if ( isTRUE(dataset$BMI[z]<30) ){
+   print(  BMI[z]<-"Overweight")
+  }
+  else {
+    print( BMI[z]<-"Obese")
+  }
+  dataset$BMI[z]
+}
+z<-1
+
+dataset$BMI
+```
+
+```{r}
+```
+**The following are ranks for students exercises ,BMI AND GPAA**
+
+```{r}
+#
+#ranking Students Exercise
+rank(dataset$exercise,na.last = TRUE,ties.method = c("min"))
+#ranking Students BMI
+rank(dataset$BMI,na.last = TRUE,ties.method = c("min"))
+#ranking Students 'PA
+rank(dataset$GPAA,ties.method = c("min"))
+#ranking FavFood according to the carbon foot print table
+rank(dataset$fav_food,na.last = TRUE,ties.method = c("min"))
+```
+#plotting 
+
+
+```{r}
+# What's the majority gender that has higher GPA ?
+#Scatterplot 
+ggplot(data=dataset,mapping = aes(x=GPAA,y=Gender))+geom_point()
+# Barchart
+ggplot(data=dataset)+geom_bar(mapping=aes(x=Gender))
+
+```
+The above figures shows that the majority gender of students is females ;however, when it comes to the GPA of each student. Then both are equivalent in competing for a higher GPA
+
+```{r}
+# Does student's income affect the number of meals that he or she eat out ?
+#barchart 
+ggplot(dataset, aes(x=pay_meal_out, y=income)) + 
+  geom_bar(stat = "identity",width=0.2)+coord_flip()
+
+```
+The above figure shows the status income of the students along with how frequent they pay meal out. The figure illustrates that the more the students has income, the more they will pay meal out and eat junk food. As they will not be concerned about how many will they pay outside.
+
+
+
+```{r}
+#Is being an employed student affect your income ? 
+#Barchart
+
+ggplot(dataset, aes(x=employment2,y=income)) + 
+  geom_bar(stat = "identity",width=0.50)+coord_flip()
+
+```
+The figure above shows that the students who work 2 and 3 jobs are more exposed to eat out than the students who never work only 1 job.However, students who do not work at all eat out frequently more than any employed student.
+
+```{r}
+#Does drinking coffee affect the student's performance in exercises 
+#BarChart
+ggplot(dataset, aes(x=exercise,y=CoffeAddict)) + 
+  geom_bar(stat = "identity",width=0.50)+coord_flip()
+
+```
+The above figure shows that students who drink more coffee do more number of exercises which are 3 per week than who do not drink coffee and they do exercise only once per week 
+```{r}
+#Do vitamins intake affects students' academic performance
+#Scatterplot 
+ggplot(data=dataset,mapping = aes(x=GPAA,y=vitamins, colour=Gender))+geom_point(na.rm=TRUE)
+```
+
+
+```{r}
+
+#The relation between the favorite food and the carbon dioxide emissions as kilos
+#Scatetrplot
+ggplot(data=dataset,mapping = aes(x=Co2KilosS,y=fav_food))+geom_point()
+#BarGraph
+p<-ggplot(data=dataset, aes(x=Co2KilosS, y=fav_food)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  theme_minimal()
+p
+
+```
+The previous graph shows the relationship between the students' favorite food choice and how its related to the carbon dioxide emitted in the environment.Since the majority prefers lamb then they will aid in increasing the pollution of the environment. The Lamb has the highest CO2 while lentil has the lowest carbon dioxide, but it's barely selected by the students.
+``` {r}
+#Do students eat out while they're studying ?
+# Testing the correlation between the students frequency of eating out AND their studying hours ?
+cortest1<-cor.test(dataset$eating_Out,dataset$Studying_hrs, method ="pearson",use="complete.obs")
+cortest1$estimate
+cortest1$p.value
+```
+
+The previous reason shows that there is a strong positive correlation between eating out and the studying hour, as eating out affects the students to studying more strongly.
+```{r}
+#The summation of calories of all the food that was eaten by the students including chicken, turkey, tortilla, scone and waffles 
+dataset$caloriesSum<-(dataset$calories_chicken+dataset$tortilla_calories+dataset$calories_scone+dataset$waffle_calories+dataset$turkey_calories)
+dataset$caloriesSum
+dataset$IntcaloriesSum<-as.integer(dataset$caloriesSum)
+is.integer(dataset$IntcaloriesSum)
+
+# Since the p-value of sum of calories eaten by each student is greater than 0.05 then it follows a normal distribution
+dataset$SumCal<- sqrt(dataset$IntcaloriesSum)
+dataset$SumCal<-as.numeric(dataset$SumCal)
+shapiro.test(dataset$SumCal)
+
+#Histogram sinceas.numeric()s in food eaten by the students is numerical and follows normal distribution
+hist(dataset$SumCal ,col="pink")
+
+```
+In the variable sumCal above, We got the square root of the sum of calories eaten by each student to get the data into a normal distribution form as the data is skewed in order to put it in a kendall correlation to know the dependency between the total calories eaten by a student and his total weight.
+```{r}
+cortest2<-cor.test(dataset$weightINKG,dataset$SumCal,method ="kendall",use="complete.obs")
+cortest2$estimate
+```
+The previous correlation shows a strong dependency between the student's weight and students Sum of calories by the food that they eat 
+
+```{r}
+#There is a correlation between the students' studying hours and becoming a vegan
+cortest3<-cor.test(dataset$Studying_hrs,dataset$Vegan,method ="pearson",use="complete.obs")
+cortest3$estimate
+```
+The previous correlation shows that there is a weak relationship between being a vegan student and the hours of studying.
+```{r}
+#calling the function calories reduction with the total of the calories that a student eat which are found in 
+#turkey, tortilla, scone, waffles and chicken
+dataset$CaloriesReduction<-CaloriesReduction(dataset$IntcaloriesSum)
+dataset$CaloriesReductionInt<-as.integer(dataset$CaloriesReduction)
+is.integer(dataset$CaloriesReductionInt)
+
+
+
+#The Calories Reduction follows normal distribution since its p-value is greater than 0.05
+dataset$caloReduction<- sqrt(CaloriesReduction(dataset$SumCal,dataset$exercise))
+dataset$caloReduction
+shapiro.test(dataset$caloReduction)
+
+#Histogram of Calories Reduction since it follows normal distribution 
+hist(dataset$caloReduction ,col="green")
+
+
+
+#There is a negative strong correlation between the students who study for long hours  and the calories reduction that is produced by their number of doing exercises
+cortest4<-cor.test(dataset$Studying_hrs,dataset$caloReduction, method ="pearson",use="complete.obs")
+cortest4$estimate
+```
+The previous correlation shows that there is a negative strong correlation between the students who study for long hours  and the calories reduction that is produced by their number of doing exercises. Which means that students who study do not move a lot or do exercises and they eat without burning calories.
+
+```{r}
+#Students' coffee intake follows normal distribution because its p value is greater than 0.05
+shapiro.test(dataset$CoffeAddict)
+#Histogram to illustrates the students' coffee intake since its numerical and follows normal distribution
+hist(dataset$CoffeAddict ,col="brown")
+#Normal Distribution representation of students' coffee intake
+ggqqplot(dataset$CoffeAddict,ylab="Students Coffee Intake")
+
+
+# Testing the correlation between the students' studying hours and their AND their coffee intake
+# There is a strong correlation between the studying hours and the coffee intake that has strong caffeine
+cortest5<-cor.test(dataset$Studying_hrs,dataset$CoffeAddict, method ="pearson",use="complete.obs")
+cortest5$estimate
+
+#Testing the correlation between the car removal and the students' percentage of following Mediterranean diet
+cortest6<-cor.test(dataset3$car_removal,dataset3$meditertanean_diet, method ="pearson",use="complete.obs")
+cortest6$estimate
+cortest6$p.value
+```
+
+There is a weak positive correlation in the previous relation between students who follow Mediterranean diet and the car removal.As the p value is smaller than 0.05 and students who are likely to eat Mediterranean diet, will reduce the carbon dioxide inside their body. Which makes a relationship between removing cars from the streets ,because these cars pollute the environment. 
+
+
+
+```{r}
+#Correlation Matrix to drop every categorical value
+num_dataset<-dataset2[,sapply(dataset2,is.numeric)]
+corrres1<-cor(num_dataset,use="complete.obs",method = "pearson")
+corrres1
+#Correlation Matrix for the dataset
+
+corrrelationMatrix<-round(cor(corrres1),1)
+corrrelationMatrix
+#Get matrix correlation p-values
+pMatrix<-cor_pmat(corrres1)
+
+
+
+
+corrHeatmapplot <- ggcorrplot(
+  corrrelationMatrix, hc.order = TRUE, type = "lower", outline.col = "white",
+  p.mat = pMatrix)
+
+corrHeatmapplot
+ggplotly(corrHeatmapplot)
+                       
+
+
+
+
+
+```
+The heat map above shows that there is a weak positive correlation with 0.16 between the studying hours and eating out correlation. This means that when the students eat out, their studying hours will increase but not strongly affected, as a slightly change will happen. While there is a weak negative correlation between students studying hours and their drinking amount of coffee, in which the studying hours increase when the coffee percentage is less. Not a strong effect but there will be an effect on the student. which concludes that caffeine is an illusion for giving certain amount of power to the brain cells. However, students seem to need caffeine to return to their normal state of alertness and to avoid the side effects of caffeine withdrawal such as headaches.and those who normally drank few caffeinated beverages didn't notice much of a difference in their level of alertness when given a placebo versus caffeine. Eating out and coffee addict has a weak negative correlation , in which the students who eat out has nothing interfered with their choice and most probably they forget to drink coffee and food for them in enough and makes them satisfied. 
+```{r}
+#step 1 :checking normality
+shapiro.test(dataset2$Studying_hrs)
+shapiro.test(dataset2$eating_Out)
+shapiro.test(dataset2$CoffeAddict)
+#step 2: check Linearity
+LinearCheck<-scatter.smooth(x=dataset2$Studying_hrs,y=dataset2$eating_Out,main="Studying_hrs ~ eating_Out")
+reg<-lm(formula =Studying_hrs ~ eating_Out, data = dataset2)
+summary(reg)
+#remove outliers
+library(dplyr)
+summary(dataset2$Studying_hrs)
+firstquart<-2.266
+thirdquart<-4.503
+val<-thirdquart - firstquart
+val<-val*1.5
+maxval<-thirdquart + val
+minval<-firstquart - val
+library(assertive)
+mean(dataset2$Studying_hrs)
+replace(dataset2$Studying_hrs,dataset2$Studying_hrs<minval,NA)
+replace(dataset2$Studying_hrs,dataset2$Studying_hrs>maxval,NA)
+
+summary(dataset2$eating_Out)
+firstquart2<-3.006
+thirdquart2<-5.992
+val2<-thirdquart2 - firstquart2
+val2<-val2*1.5
+maxval2<- thirdquart2 + val2
+maxval2
+minval2<-firstquart2 - val2
+minval2
+replace(dataset2$eating_Out,dataset2$eating_Out>minval2,mean(dataset2$eating_Out))
+replace(dataset2$eating_Out,dataset2$eating_Out<maxval2,mean(dataset2$eating_Out))
+
+ggplot(dataset2,aes(x=Studying_hrs,y=eating_Out))+geom_point(na.rm = TRUE)+geom_smooth(method = "lm",col="blue")+stat_regline_equation(label.x=3,label.y=7)+theme_bw()+labs(title = "studying hours/eating out",x="studying hours",y="eating out")
+
+```
+      The previous is the linear regression to test the dependency between the correlated student studying hours and their rate of eating out. There was a correlation between the variables that was applied previously.The linearity was checked through the 
+The outliers were removed from the data by using the equation IQR= Q3-Q1 , then multiplied the IQR by 1.5. Then added the value to Q3 with IQR and subtract IQR from Q1 to get the outliers. Afterwards, the range was between 12.7105 and -3.7125. Any value outside was removed. 
+There is dependency between students' studying hours and eating out, in which eating out is depending on the number of studying hours that each students takes and it increases along it.
+```{r}
+dataset3$car_removal<-as.numeric(dataset3$car_removal)
+dataset3$meditertanean_diet<-as.numeric(dataset3$car_removal)
+
+#Testing the correlation between the car removal and the Mediterranean diet 
+cortest6<-cor.test(dataset3$car_removal,dataset3$meditertanean_diet, method ="pearson",use="complete.obs")
+cortest6$estimate
+cortest6$p.value
+```
+The previous correlation shows that there is strong positive relationship between car removal and students following the Mediterranean diet. As students change to Mediterranean diet, the more car removal in the streets will take place.
+
+```{r}
+reg2<-lm(formula = car_removal ~ meditertanean_diet ,dataset3)
+dataset3<-expand.grid(meditertanean_diet=seq(min(dataset3$meditertanean_diet),max(dataset3$meditertanean_diet),length.out=30),car_removal=c(min(dataset3$car_removal),mean(dataset3$car_removal),max(dataset3$car_removal)))
+
+temp<-predict(reg2,newdata = dataset3)
+dataset3$predicted<-temp
+dataset3$car_removal<-as.factor(round(dataset3$car_removal,2))
+ggplot(dataset3,mapping =  aes(x=meditertanean_diet,y=car_removal))+geom_point()+geom_line(dataset3,mapping =  aes(x=meditertanean_diet,y=predicted,color=car_removal),size=1.225)
+
+
+```
+   The previous linear regression shows the dependency between the car removal and the    Mediterranean diet. When students get biased to Mediterranean diet , the car removals in the streets will increase.In which these cars emit co2 that pollute the environment.Therefore eating seafood will help the environment.
+```{r}
+
+
+
+```
+**The data gathered describes the college students’ diet habits and its effect on their academic and sportive life. In addition to the effect of their choices on the outer environment that affects other people in the society. Starting by the supplements or vitamins. It was shown that beginner students who do exercise only once a week depend on taking vitamins, as well as the expert students who do 3 exercises per week. In fact exercises appears to decrease nutrient status of the body; therefore, vitamins increase turnover, metabolism or loss of nutrients; through biochemical adaptations as a result of training that increases nutrient needs, by increase in mitochondrial enzymes, which is the cell house in the human body that uses most of the energy released from the breakdown of nutrients to synthesize ATP. Along with the myth that coffee intake has a role in keeping the students alerted and focused to keep studying for longer hours. Coffee was proofed to be an illusion as the majority of students do not drink coffee and their studying hours are greater, that could reach up to 6 hours, than those who drink coffee. As an interesting fact researchers say that coffee has no benefits gain; however, it increases the risk of anxiety and raises blood pressure. And once a person has been drinking caffeine long enough, their body becomes dependent, so they experience withdrawal symptoms in the absence of caffeine. This is why, for some, drinking a cup of coffee provides an illusion of increased alertness known as placebo effect. When, in reality, it is just normalizing their energy levels, so they go from below minimum functionality to the normal capacity of someone who doesn’t drink coffee. In response, it was found that students who drink more coffee are doing more exercises as they think that coffee is the source of their energy.**
+
+**Sport and physical activity positively impacts students’ academic performance to get higher GPAs. as it encourages the enhancement of brain function and cognition through increasing blood flow to the brain; increasing levels of norepinephrine and endorphins; and increasing growth factors that help create new nerve cells and support synaptic plasticity. However, playing more than one sport may distract students to focus on their academic performance to reach a 4 GPA. Concluding that it takes time more than usual in their day schedule, well they will still get high GPA, but not reaching the highest compared to playing 1 sport. Using EDA ,it was found that the female students are more in number in the Mercyhurst University, but in the academic competition race both genders gets equivalently the same high GPAs. Eating junk food is a habit especially in the youth generation who are at the age of college, where they don’t have time to meal prep. We tried to categorize their income status along with paying for meals out.  It was shown that the students who have higher income rate will pay for junk food more , as paying for ready food will help them to eat without the headache of getting to cook. However, students who have a poor income will not be able to afford paying out every time. They still pay and get junk food, but occasionally. But the income has an impact from the beginning on students’ life habits. As being an employed student will raise your income in order to pay for meal out. People think that when students go out and eat, that they will be distracted as going out consumes time and this will affect the students studying hours. But it was proven extremely wrong, as students studying hour’s increases when they eat out. Considering that students have to be cautious while eating, as their body weight depends on their daily caloric intake.  Vegan students have the same studying hours as students who eat meat and chicken. As studying hours quantity don’t define how do students eat .However, it was known that since plant-based foods can also be low in calories, a vegan diet can lead to fatigue if you don't eat enough to keep your mental and physical energy up. Studying more don’t reduce calories which indicates that students during their studying hours eat snacks and sit without making any movement, which will not burn calories for them. Student who are likely willing to eat Mediterranean diet, which is a diet that includes healthy plant foods and seafood twice a week, are playing a huge role without noticing in the environment . As Mediterranean diet are associated with a lower environmental impact as, among other diets, they reduce greenhouse gas emissions and the use of energy, land and water. The analysis was shown that car removal increases when the students eat Mediterranean diet. As the effect of removing cars from the streets is equivalent to eating Mediterranean diet. In conclusion students affect themselves and other without noticing and several food choices can lead to greater food security and environmental sustainability for future generations; therefore, it’s a huge responsibility to choose what to eat.**
